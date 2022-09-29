@@ -1,12 +1,8 @@
 package com.codepunk.credlychallenge.data.mapper
 
 import com.codepunk.credlychallenge.data.local.model.ShowLocal
-import com.codepunk.credlychallenge.data.remote.model.ExternalsRemote
 import com.codepunk.credlychallenge.data.remote.model.ShowRemote
-import com.codepunk.credlychallenge.domain.model.Externals
 import com.codepunk.credlychallenge.domain.model.Show
-
-fun ExternalsRemote.toDomainModel(): Externals = Externals(tvRage, theTvDb, imdb)
 
 fun ShowRemote.toDomainModel(): Show = Show(
     id,
@@ -21,7 +17,6 @@ fun ShowRemote.toDomainModel(): Show = Show(
     premiered,
     ended,
     officialSite,
-    externals?.toDomainModel(),
     images,
     summary
 )
@@ -29,7 +24,6 @@ fun ShowRemote.toDomainModel(): Show = Show(
 fun Show.toLocalModel(): ShowLocal = ShowLocal(
     id,
     name,
-    externals?.imdb ?: "",
     url,
     type,
     language,
@@ -40,7 +34,6 @@ fun Show.toLocalModel(): ShowLocal = ShowLocal(
     premiered,
     ended,
     officialSite,
-    externals,
     images,
     summary
 )
@@ -58,7 +51,6 @@ fun ShowLocal.toDomainModel(): Show = Show(
     premiered,
     ended,
     officialSite,
-    externals,
     images,
     summary
 )

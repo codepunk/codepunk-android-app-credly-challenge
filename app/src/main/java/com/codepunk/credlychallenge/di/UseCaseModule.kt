@@ -17,8 +17,8 @@ class UseCaseModule {
     @Provides
     fun providesGetShowsUseCase(
         tvShowRepository: TvShowRepository
-    ): GetShowsUseCase = GetShowsUseCase { imdbList ->
-        getShows(imdbList, tvShowRepository)
+    ): GetShowsUseCase = GetShowsUseCase { ids ->
+        getShows(ids, tvShowRepository)
     }
 
     @Provides

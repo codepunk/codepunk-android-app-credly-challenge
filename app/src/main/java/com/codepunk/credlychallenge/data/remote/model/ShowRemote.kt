@@ -30,8 +30,6 @@ data class ShowRemote(
 
     val officialSite: String?,
 
-    val externals: ExternalsRemote?,
-
     @SerialName("image")
     val images: Map<String, String>?,
 

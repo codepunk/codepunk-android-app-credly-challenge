@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.codepunk.credlychallenge.domain.model.Externals
 import kotlinx.datetime.LocalDate
 
 @Entity(
@@ -17,8 +16,6 @@ import kotlinx.datetime.LocalDate
 data class ShowLocal(
     @PrimaryKey
     val id: Int,
-
-    val imdb: String?,
 
     val name: String,
 
@@ -43,8 +40,6 @@ data class ShowLocal(
 
     @ColumnInfo(name = "official_site")
     val officialSite: String?,
-
-    val externals: Externals?,
 
     val images: Map<String, String>?,
 

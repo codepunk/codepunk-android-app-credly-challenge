@@ -15,7 +15,6 @@ data class Show(
     val premiered: LocalDate?,
     val ended: LocalDate?,
     val officialSite: String?,
-    val externals: Externals?,
     val images: Map<String, String>?,
     val summary: String?
 )

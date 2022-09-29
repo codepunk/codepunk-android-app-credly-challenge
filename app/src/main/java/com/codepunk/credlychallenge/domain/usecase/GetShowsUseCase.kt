@@ -7,14 +7,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
-fun interface GetShowsUseCase : suspend (List<String>) -> Flow<Result<List<Show>>>
+fun interface GetShowsUseCase : suspend (List<Int>) -> Flow<Result<List<Show>>>
 
 fun getShows(
-    imdbList: List<String>,
+    ids: List<Int>,
     tvShowRepository: TvShowRepository
 ): Flow<Result<List<Show>>> =
     tvShowRepository
-        .getShows(imdbList)
+        .getShows(ids)
         .map { shows ->
             resultOf { shows }
         }

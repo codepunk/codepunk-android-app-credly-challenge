@@ -1,7 +1,6 @@
 package com.codepunk.credlychallenge.data.local.converters
 
 import androidx.room.TypeConverter
-import com.codepunk.credlychallenge.domain.model.Externals
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -21,13 +20,6 @@ object Converters {
 
     @TypeConverter
     fun toString(map: Map<String, String>?): String? = map?.run { Json.encodeToString(this) }
-
-    @TypeConverter
-    fun toExternals(value: String?): Externals? = value?.run { Json.decodeFromString(this) }
-
-    @TypeConverter
-    fun toString(externals: Externals?): String? =
-        externals?.run { Json.encodeToString(this) }
 
     @TypeConverter
     fun toLocalDate(value: String?): LocalDate? = value?.run {

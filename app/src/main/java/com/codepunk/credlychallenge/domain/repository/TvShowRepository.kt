@@ -8,6 +8,6 @@ interface TvShowRepository {
 
     fun searchShows(query: String): Flow<List<SearchResult>>
 
-    fun getShows(imdbList: List<String>): Flow<List<Show>>
+    fun getShows(ids: List<Int>): Flow<List<Show>>
 
 }

@@ -8,7 +8,6 @@ import com.codepunk.credlychallenge.domain.model.SearchResult
 import com.codepunk.credlychallenge.domain.model.Show
 import com.codepunk.credlychallenge.domain.repository.TvShowRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -25,12 +24,12 @@ class TvShowRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getShows(imdbList: List<String>): Flow<List<Show>> = flow {
+    override fun getShows(ids: List<Int>): Flow<List<Show>> = flow {
         val list = mutableListOf<Show>()
-        imdbList.forEach { imdb ->
-            showDao.getShow(imdb)?.toDomainModel() ?: run {
+        ids.forEach { id ->
+            showDao.getShow(id)?.toDomainModel() ?: run {
                 // The show didn't exist in the local db, so fetch remote & save it
-                tvShowApi.getShow(imdb)
+                tvShowApi.getShow(id)
                     ?.toDomainModel()
                     ?.also { show ->
                         showDao.saveShow(show.toLocalModel())
