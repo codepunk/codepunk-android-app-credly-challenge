@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">CredlyChallenge</string>
-    <string name="search">Search</string>
+    <string name="shows">Shows</string>
+    <string name="premiered_label">Premiered:</string>
+    <string name="ended_label">Ended:</string>
+
+    <string name="content_description_show_thumbnail">Show thumbnail</string>
 </resources>

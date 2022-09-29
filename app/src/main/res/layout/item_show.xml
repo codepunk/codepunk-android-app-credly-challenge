@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="show"
+            type="com.codepunk.credlychallenge.domain.model.Show"
+            />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:padding="@dimen/default_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:id="@+id/show_thumbnail"
+            android:layout_width="@dimen/default_image_size"
+            android:layout_height="@dimen/default_image_size"
+            android:contentDescription="@string/content_description_show_thumbnail"
+            app:bindThumbnail="@{show.images}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/show_name"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@{show.name}"
+            app:layout_constraintStart_toEndOf="@id/show_thumbnail"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textStyle="bold"
+            tools:text="Show Name"
+            />
+
+        <TextView
+            android:id="@+id/show_premiered_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:text="@string/premiered_label"
+            android:textStyle="bold"
+            android:visibility="@{show.premiered == null ? View.GONE : View.VISIBLE}"
+            app:layout_constraintStart_toEndOf="@id/show_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/show_name"
+            app:layout_constraintBottom_toTopOf="@id/show_ended_label"
+            />
+
+        <TextView
+            android:id="@+id/show_premiered"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            app:bindLocalDate="@{show.premiered}"
+            android:visibility="@{show.premiered == null ? View.GONE : View.VISIBLE}"
+            app:layout_constraintStart_toEndOf="@id/show_premiered_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@id/show_premiered_label"
+            tools:text="January 4, 1989"
+            />
+
+        <TextView
+            android:id="@+id/show_ended_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:text="@string/ended_label"
+            android:textStyle="bold"
+            android:visibility="@{show.ended == null ? View.GONE : View.VISIBLE}"
+            app:layout_constraintStart_toEndOf="@id/show_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/show_premiered_label"
+            />
+
+        <TextView
+            android:id="@+id/show_ended"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            app:layout_constraintStart_toEndOf="@id/show_ended_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@id/show_ended_label"
+            app:bindLocalDate="@{show.ended}"
+            android:visibility="@{show.ended == null ? View.GONE : View.VISIBLE}"
+            tools:text="March 23, 1993"
+            />
+
+        <TextView
+            android:id="@+id/genres"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            app:bindGenres="@{show.genres}"
+            app:layout_constraintStart_toEndOf="@id/show_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/show_ended_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Comedy | Fantasy | Supernatural | Another | Another"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

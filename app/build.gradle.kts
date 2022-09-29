@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.codepunk.credlychallenge"
-        minSdk = 23
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -48,6 +48,11 @@ android {
 
     packagingOptions {
         resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+    }
+
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
     }
 }
 

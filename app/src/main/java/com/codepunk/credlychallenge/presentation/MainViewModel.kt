@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codepunk.credlychallenge.domain.model.SearchResult
+import com.codepunk.credlychallenge.domain.model.Show
 import com.codepunk.credlychallenge.domain.usecase.GetShowsUseCase
 import com.codepunk.credlychallenge.domain.usecase.SearchShowsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,11 +21,19 @@ class MainViewModel @Inject constructor(
     private val _loading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
+    /*
     private val _searchResults: MutableStateFlow<List<SearchResult>?> = MutableStateFlow(null)
     val searchResults = _searchResults.asStateFlow()
 
     private val _searchError: MutableStateFlow<Lazy<Throwable>?> = MutableStateFlow(null)
     val searchError = _searchError.asStateFlow()
+     */
+
+    private val _showsResult = MutableStateFlow<Result<List<Show>>>(Result.success(emptyList()))
+    val showsResult = _showsResult.asStateFlow()
+
+    private val _showsError = MutableStateFlow<Lazy<Throwable>?>(null)
+    val showsError = _showsError.asStateFlow()
 
     fun getDefaultShows() {
         viewModelScope.launch {
@@ -32,16 +41,20 @@ class MainViewModel @Inject constructor(
             val imdbList = defaultShowImdbMap.values.toList()
             getShowsUseCase(imdbList)
                 .collect { result ->
+                    _showsResult.value = result
+                    /*
                     result.onSuccess { list ->
 
                     }.onFailure { throwable ->
 
                     }
+                     */
                     _loading.value = false
                 }
         }
     }
 
+    /*
     fun searchShows(query: String) {
         viewModelScope.launch {
             _loading.value = true
@@ -60,6 +73,7 @@ class MainViewModel @Inject constructor(
                 }
         }
     }
+     */
 
     companion object {
         private val defaultShowImdbMap: Map<String, String> = mapOf(

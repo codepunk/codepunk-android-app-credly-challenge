@@ -1,23 +1,27 @@
 package com.codepunk.credlychallenge.presentation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.core.view.isVisible
-import androidx.core.widget.ContentLoadingProgressBar
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Adapter
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.codepunk.credlychallenge.R
-import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.codepunk.credlychallenge.databinding.FragmentMainBinding
+import com.codepunk.credlychallenge.databinding.ItemShowBinding
+import com.codepunk.credlychallenge.domain.model.Show
+import com.codepunk.credlychallenge.util.consume
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -26,81 +30,112 @@ class MainFragment : Fragment() {
 
     private val viewModel: MainViewModel by viewModels()
 
-    private val queryEdit: EditText by lazy {
-        requireView().findViewById(R.id.query_edit)
-    }
+    private lateinit var binding: FragmentMainBinding
 
-    private val searchButton: Button by lazy {
-        requireView().findViewById(R.id.search_button)
-    }
-
-    private val progressBar: ProgressBar by lazy {
-        requireView().findViewById(R.id.progress_bar)
-    }
+    private val showAdapter = ShowAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_main, container, false)
-    }
+    ): View = FragmentMainBinding.inflate(inflater)
+        .apply {
+            binding = this
+        }
+        .root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        with(binding.showRecycler) {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                RecyclerView.VERTICAL,
+                false
+            )
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            adapter = showAdapter
+        }
+
+        collectValues()
+
         if (savedInstanceState == null) {
             viewModel.getDefaultShows()
         }
+    }
 
-        searchButton.setOnClickListener {
-            onSearch()
-        }
-
+    private fun collectValues() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.loading.collect { loading ->
-                        if (loading) {
-                            progressBar.visibility = View.VISIBLE
-                        } else {
-                            progressBar.visibility = View.GONE
-                        }
-                        Log.d("MainFragment", "loading=$loading")
-                    }
+                    viewModel.loading.collect { onLoading(it) }
                 }
 
                 launch {
-                    viewModel.searchResults.collect { list ->
-                        Log.d("MainFragment", "list=$list")
-                    }
+                    viewModel.showsResult.collect { onResult(it) }
                 }
 
                 launch {
-                    viewModel.searchError.collect { lazy ->
-                        Log.e("MainFragment", "lazy=$lazy")
-                        lazy?.run {
-                            val displayError = !isInitialized()
-                            val throwable = lazy.value
-                            if (displayError) {
-                                Toast
-                                    .makeText(
-                                        requireContext(),
-                                        throwable.message,
-                                        Toast.LENGTH_LONG
-                                    )
-                                    .show()
-                                Log.d("MainFragment", throwable.message, throwable)
-                            }
-                        }
-                    }
+                    viewModel.showsError.collect { onError(it) }
                 }
             }
         }
     }
 
-    fun onSearch() {
-        val query = queryEdit.text.toString()
-        viewModel.searchShows(query)
+    private fun onLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.progressBar.show()
+        } else {
+            binding.progressBar.hide()
+        }
+    }
+
+    private fun onResult(result: Result<List<Show>>) {
+        result.onSuccess {
+            showAdapter.shows = it
+        }
+    }
+
+    private fun onError(error: Lazy<Throwable>?) {
+        error?.consume { throwable ->
+            Toast
+                .makeText(requireContext(), throwable.message, Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    private class ShowViewHolder(private val binding: ItemShowBinding) : ViewHolder(binding.root) {
+        fun bind(show: Show) {
+            binding.show = show
+        }
+    }
+
+    private class ShowAdapter : Adapter<ShowViewHolder>() {
+
+        var shows: List<Show> = emptyList()
+            @SuppressLint("NotifyDataSetChanged")
+            set(value) {
+                field = value
+                notifyDataSetChanged()
+            }
+
+        override fun getItemCount(): Int = shows.size
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
+            val binding = DataBindingUtil.inflate<ItemShowBinding>(
+                LayoutInflater.from(parent.context),
+                R.layout.item_show,
+                parent,
+                false
+            )
+            return ShowViewHolder(binding)
+        }
+
+        override fun onBindViewHolder(holder: ShowViewHolder, position: Int) {
+            shows.getOrNull(position)?.also {
+                holder.bind(it)
+            }
+        }
+
     }
 
 }
