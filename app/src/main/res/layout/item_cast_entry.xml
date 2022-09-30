@@ -7,10 +7,9 @@
 
     <data>
         <import type="android.view.View"/>
-        <import type="android.text.Html"/>
         <variable
-            name="episode"
-            type="com.codepunk.credlychallenge.domain.model.Episode"
+            name="castEntry"
+            type="com.codepunk.credlychallenge.domain.model.CastEntry"
             />
     </data>
 
@@ -25,7 +24,7 @@
             android:layout_width="@dimen/default_image_size"
             android:layout_height="@dimen/default_image_size"
             android:contentDescription="@string/content_description_show_thumbnail"
-            app:bindThumbnail="@{episode.images}"
+            app:bindThumbnail="@{castEntry.character.images}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -38,12 +37,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginTop="@dimen/default_margin"
-            android:text='@{`"` + episode.name + `"`}'
+            android:text="@{castEntry.character.name}"
             app:layout_constraintStart_toEndOf="@id/character_thumbnail"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textStyle="bold|italic"
-            tools:text='"Episode Name"'
+            android:textStyle="bold"
+            tools:text="Character Name"
             />
 
         <TextView
@@ -51,39 +50,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
-            android:text="@string/airdate_label"
-            android:textStyle="bold"
-            android:visibility="@{episode.airDate == null ? View.GONE : View.VISIBLE}"
+            android:text="@{castEntry.person.name}"
+            android:visibility="@{castEntry.person.name == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintStart_toEndOf="@id/character_thumbnail"
             app:layout_constraintTop_toBottomOf="@id/character_name"
-            app:layout_constraintBottom_toTopOf="@id/summary"
+            tools:text="Person Name"
             />
 
+        <!--
         <TextView
             android:id="@+id/episode_airdate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
-            app:bindLocalDate="@{episode.airDate}"
-            android:visibility="@{episode.airDate == null ? View.GONE : View.VISIBLE}"
-            app:layout_constraintStart_toEndOf="@id/person_name"
+            app:bindLocalDate="@{castEntry.airDate}"
+            android:visibility="@{castEntry.airDate == null ? View.GONE : View.VISIBLE}"
+            app:layout_constraintStart_toEndOf="@id/episode_airdate_label"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBaseline_toBaselineOf="@id/person_name"
+            app:layout_constraintBaseline_toBaselineOf="@id/episode_airdate_label"
             tools:text="January 4, 1989"
             />
+            -->
 
+        <!--
         <TextView
             android:id="@+id/summary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginTop="@dimen/default_margin"
-            android:text="@{Html.fromHtml(episode.summary)}"
+            android:text="@{Html.fromHtml(castEntry.summary)}"
             app:layout_constraintStart_toEndOf="@id/character_thumbnail"
-            app:layout_constraintTop_toBottomOf="@id/person_name"
+            app:layout_constraintTop_toBottomOf="@id/episode_airdate_label"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Hijinks ensued."
             />
+            -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

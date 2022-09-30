@@ -1,19 +1,28 @@
 package com.codepunk.credlychallenge.presentation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.codepunk.credlychallenge.BuildConfig
+import com.codepunk.credlychallenge.R
 import com.codepunk.credlychallenge.databinding.FragmentCastBinding
+import com.codepunk.credlychallenge.databinding.ItemCastEntryBinding
+import com.codepunk.credlychallenge.databinding.ItemEpisodeBinding
 import com.codepunk.credlychallenge.domain.model.CastEntry
+import com.codepunk.credlychallenge.domain.model.Episode
 import com.codepunk.credlychallenge.util.consume
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -28,6 +37,8 @@ class CastFragment @Inject constructor() : Fragment() {
 
     private lateinit var binding: FragmentCastBinding
 
+    private val castAdapter = CastAdapter()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +50,16 @@ class CastFragment @Inject constructor() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        with(binding.castRecycler) {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                RecyclerView.VERTICAL,
+                false
+            )
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            adapter = castAdapter
+        }
 
         setUpCollection()
 
@@ -74,7 +95,7 @@ class CastFragment @Inject constructor() : Fragment() {
 
     private fun onResult(result: Result<List<CastEntry>>) {
         result.onSuccess {
-            // TODO
+            castAdapter.cast = it
         }
     }
 
@@ -84,6 +105,42 @@ class CastFragment @Inject constructor() : Fragment() {
                 .makeText(requireContext(), throwable.message, Toast.LENGTH_LONG)
                 .show()
         }
+    }
+
+    private class CastEntryViewHolder(val binding: ItemCastEntryBinding) : ViewHolder(binding.root) {
+        fun bind(castEntry: CastEntry) {
+            binding.castEntry = castEntry
+        }
+    }
+
+    private class CastAdapter() : RecyclerView.Adapter<CastEntryViewHolder>() {
+
+        var cast: List<CastEntry> = emptyList()
+            @SuppressLint("NotifyDataSetChanged")
+            set(value) {
+                field = value
+                notifyDataSetChanged()
+            }
+
+        override fun getItemCount(): Int = cast.size
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastEntryViewHolder {
+            val binding = DataBindingUtil.inflate<ItemCastEntryBinding>(
+                LayoutInflater.from(parent.context),
+                R.layout.item_cast_entry,
+                parent,
+                false
+            )
+
+            return CastEntryViewHolder(binding)
+        }
+
+        override fun onBindViewHolder(holder: CastEntryViewHolder, position: Int) {
+            cast.getOrNull(position)?.also { castEntry ->
+                holder.bind(castEntry)
+            }
+        }
+
     }
 
 }

@@ -20,9 +20,7 @@ import com.codepunk.credlychallenge.BuildConfig
 import com.codepunk.credlychallenge.R
 import com.codepunk.credlychallenge.databinding.FragmentEpisodesBinding
 import com.codepunk.credlychallenge.databinding.ItemEpisodeBinding
-import com.codepunk.credlychallenge.databinding.ItemShowBinding
 import com.codepunk.credlychallenge.domain.model.Episode
-import com.codepunk.credlychallenge.domain.model.Show
 import com.codepunk.credlychallenge.util.consume
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -142,4 +140,5 @@ class EpisodesFragment @Inject constructor() : Fragment() {
         }
 
     }
+
 }
