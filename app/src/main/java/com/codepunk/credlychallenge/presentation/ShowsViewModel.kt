@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class ShowsViewModel @Inject constructor(
     private val getShowsUseCase: GetShowsUseCase
 ) : ViewModel() {
     private val _loading: MutableStateFlow<Boolean> = MutableStateFlow(false)

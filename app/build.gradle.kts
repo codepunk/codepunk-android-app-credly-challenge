@@ -21,6 +21,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "TVMAZE_API_URL", "\"https://api.tvmaze.com\"")
+        buildConfigField("String", "KEY_SHOW_ID", "\"key_show_id\"")
+        buildConfigField("String", "KEY_SHOW_NAME", "\"key_show_name\"")
     }
 
     buildTypes {

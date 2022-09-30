@@ -12,8 +12,8 @@ fun interface GetShowsUseCase : suspend (List<Int>) -> Flow<Result<List<Show>>>
 fun getShows(
     ids: List<Int>,
     tvShowRepository: TvShowRepository
-): Flow<Result<List<Show>>> =
-    tvShowRepository
+): Flow<Result<List<Show>>> {
+    return tvShowRepository
         .getShows(ids)
         .map { shows ->
             resultOf { shows }
@@ -21,3 +21,4 @@ fun getShows(
         .catch { throwable ->
             this.emit(Result.failure(throwable))
         }
+}

@@ -27,14 +27,16 @@ class TvShowRepositoryImpl @Inject constructor(
     override fun getShows(ids: List<Int>): Flow<List<Show>> = flow {
         val list = mutableListOf<Show>()
         ids.forEach { id ->
-            showDao.getShow(id)?.toDomainModel() ?: run {
+            val s = showDao.getShow(id)?.toDomainModel() ?: run {
                 // The show didn't exist in the local db, so fetch remote & save it
                 tvShowApi.getShow(id)
                     ?.toDomainModel()
                     ?.also { show ->
                         showDao.saveShow(show.toLocalModel())
                     }
-            }?.run {
+            }
+
+            s?.run {
                 list.add(this)
             }
         }

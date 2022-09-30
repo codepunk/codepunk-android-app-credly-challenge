@@ -12,13 +12,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.codepunk.credlychallenge.MainActivity
 import com.codepunk.credlychallenge.R
-import com.codepunk.credlychallenge.databinding.FragmentMainBinding
+import com.codepunk.credlychallenge.databinding.FragmentShowsBinding
 import com.codepunk.credlychallenge.databinding.ItemShowBinding
 import com.codepunk.credlychallenge.domain.model.Show
 import com.codepunk.credlychallenge.util.consume
@@ -26,20 +28,25 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class ShowsFragment : Fragment() {
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: ShowsViewModel by viewModels()
 
-    private lateinit var binding: FragmentMainBinding
+    private lateinit var binding: FragmentShowsBinding
 
-    private val showAdapter = ShowAdapter()
+    private val showAdapter = ShowAdapter(
+        OnClickListener {
+            onShowClicked(it)
+        }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = FragmentMainBinding.inflate(inflater)
+    ): View = FragmentShowsBinding.inflate(inflater)
         .apply {
             binding = this
+            (requireActivity() as MainActivity).setToolbar(binding.toolbar)
         }
         .root
 
@@ -103,13 +110,24 @@ class MainFragment : Fragment() {
         }
     }
 
-    private class ShowViewHolder(private val binding: ItemShowBinding) : ViewHolder(binding.root) {
+    private fun onShowClicked(show: Show) {
+        val action = ShowsFragmentDirections.actionShowsToShow(show.id, show.name)
+        findNavController().navigate(action)
+    }
+
+    private class OnClickListener(val clickListener: (show: Show) -> Unit) {
+        fun onClick(show: Show) = clickListener(show)
+    }
+
+    private class ShowViewHolder(val binding: ItemShowBinding) : ViewHolder(binding.root) {
         fun bind(show: Show) {
             binding.show = show
         }
     }
 
-    private class ShowAdapter : Adapter<ShowViewHolder>() {
+    private class ShowAdapter(
+        private val onClickListener: OnClickListener
+    ) : Adapter<ShowViewHolder>() {
 
         var shows: List<Show> = emptyList()
             @SuppressLint("NotifyDataSetChanged")
@@ -127,12 +145,16 @@ class MainFragment : Fragment() {
                 parent,
                 false
             )
+
             return ShowViewHolder(binding)
         }
 
         override fun onBindViewHolder(holder: ShowViewHolder, position: Int) {
-            shows.getOrNull(position)?.also {
-                holder.bind(it)
+            shows.getOrNull(position)?.also { show ->
+                holder.bind(show)
+                holder.binding.root.setOnClickListener {
+                    onClickListener.onClick(show)
+                }
             }
         }
 

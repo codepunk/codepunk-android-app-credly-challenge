@@ -4,14 +4,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/main_fragment"
+    app:startDestination="@id/shows_fragment"
     >
 
     <fragment
-        android:id="@+id/main_fragment"
-        android:name="com.codepunk.credlychallenge.presentation.MainFragment"
+        android:id="@+id/shows_fragment"
+        android:name="com.codepunk.credlychallenge.presentation.ShowsFragment"
         android:label="@string/shows"
-        tools:layout="@layout/fragment_main"
-        />
+        tools:layout="@layout/fragment_shows"
+        >
+
+        <action
+            android:id="@+id/action_shows_to_show"
+            app:destination="@id/show_fragment"
+            />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/show_fragment"
+        android:name="com.codepunk.credlychallenge.presentation.ShowFragment"
+        tools:layout="@layout/fragment_show"
+        >
+        <argument
+            android:name="show_id"
+            app:argType="integer"
+            />
+        <argument
+            android:name="show_name"
+            app:argType="string"
+            />
+    </fragment>
 
 </navigation>
