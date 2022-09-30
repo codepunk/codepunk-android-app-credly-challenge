@@ -8,6 +8,8 @@ interface TvShowRepository {
 
     fun searchShows(query: String): Flow<List<SearchResult>>
 
+    fun getShow(id: Int): Flow<Show?>
+
     fun getShows(ids: List<Int>): Flow<List<Show>>
 
 }

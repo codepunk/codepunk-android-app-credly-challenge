@@ -7,16 +7,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
-fun interface GetShowsUseCase : suspend (List<Int>) -> Flow<Result<List<Show>>>
+fun interface GetShowUseCase : suspend (Int) -> Flow<Result<Show?>>
 
-fun getShows(
-    ids: List<Int>,
+fun getShow(
+    showId: Int,
     tvShowRepository: TvShowRepository
-): Flow<Result<List<Show>>> {
+): Flow<Result<Show?>> {
     return tvShowRepository
-        .getShows(ids)
-        .map { shows ->
-            resultOf { shows }
+        .getShow(showId)
+        .map { show ->
+            resultOf { show }
         }
         .catch { emit(Result.failure(it)) }
 }

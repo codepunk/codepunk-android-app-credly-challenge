@@ -18,6 +18,4 @@ fun searchShows(
         .map { shows ->
             resultOf { shows }
         }
-        .catch { throwable ->
-            this.emit(Result.failure(throwable))
-        }
+        .catch { emit(Result.failure(it)) }

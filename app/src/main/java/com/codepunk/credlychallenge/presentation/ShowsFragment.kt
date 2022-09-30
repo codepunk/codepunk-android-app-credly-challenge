@@ -63,14 +63,14 @@ class ShowsFragment : Fragment() {
             adapter = showAdapter
         }
 
-        collectValues()
+        setUpCollection()
 
         if (savedInstanceState == null) {
             viewModel.getDefaultShows()
         }
     }
 
-    private fun collectValues() {
+    private fun setUpCollection() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {

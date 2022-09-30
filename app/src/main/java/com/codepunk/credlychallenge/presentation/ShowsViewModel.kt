@@ -30,6 +30,11 @@ class ShowsViewModel @Inject constructor(
             getShowsUseCase(ids)
                 .collect { result ->
                     _showsResult.value = result
+                    result.onSuccess {
+                        _showsError.value = null
+                    }.onFailure {
+                        _showsError.value = lazy { it }
+                    }
                     _loading.value = false
                 }
         }

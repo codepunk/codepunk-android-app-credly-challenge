@@ -24,20 +24,29 @@ class TvShowRepositoryImpl @Inject constructor(
         )
     }
 
+    override fun getShow(id: Int): Flow<Show?> = flow {
+        val show = showDao.getShow(id)?.toDomainModel() ?: run {
+            // The show is not in the local db, so fetch remote & save it
+            tvShowApi.getShow(id)
+                ?.toDomainModel()
+                ?.also { showDao.saveShow(it.toLocalModel()) }
+        }
+
+        emit(show)
+    }
+
     override fun getShows(ids: List<Int>): Flow<List<Show>> = flow {
         val list = mutableListOf<Show>()
         ids.forEach { id ->
-            val s = showDao.getShow(id)?.toDomainModel() ?: run {
-                // The show didn't exist in the local db, so fetch remote & save it
+            val show = showDao.getShow(id)?.toDomainModel() ?: run {
+                // The show is not in the local db, so fetch remote & save it
                 tvShowApi.getShow(id)
                     ?.toDomainModel()
-                    ?.also { show ->
-                        showDao.saveShow(show.toLocalModel())
-                    }
+                    ?.also { showDao.saveShow(it.toLocalModel()) }
             }
 
-            s?.run {
-                list.add(this)
+            if (show != null) {
+                list.add(show)
             }
         }
         emit(list.toList())
