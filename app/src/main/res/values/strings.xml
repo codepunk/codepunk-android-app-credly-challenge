@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">CredlyChallenge</string>
     <string name="shows">Shows</string>
+    <string name="episodes">Episodes</string>
+    <string name="cast">Cast</string>
+
     <string name="premiered_label">Premiered:</string>
     <string name="ended_label">Ended:</string>
 

@@ -1,32 +1,50 @@
 package com.codepunk.credlychallenge.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.codepunk.credlychallenge.MainActivity
+import com.codepunk.credlychallenge.R
 import com.codepunk.credlychallenge.databinding.FragmentShowBinding
 import com.codepunk.credlychallenge.domain.model.Show
+import com.codepunk.credlychallenge.presentation.ShowFragment.ShowPagerAdapter.Companion.CAST_POSITION
+import com.codepunk.credlychallenge.presentation.ShowFragment.ShowPagerAdapter.Companion.EPISODES_POSITION
 import com.codepunk.credlychallenge.util.consume
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Provider
 
 @AndroidEntryPoint
 class ShowFragment : Fragment() {
+
+    @Inject
+    lateinit var episodesFragmentProvider: Provider<EpisodesFragment>
+
+    @Inject
+    lateinit var castFragmentProvider: Provider<CastFragment>
 
     private val args: ShowFragmentArgs by navArgs()
 
     private val viewModel: ShowViewModel by viewModels()
 
     private lateinit var binding: FragmentShowBinding
+
+    private lateinit var adapter: ShowPagerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +58,36 @@ class ShowFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter = ShowPagerAdapter(
+            requireActivity(),
+            episodesFragmentProvider,
+            castFragmentProvider
+        )
+        with(binding.viewPager) {
+            adapter = this@ShowFragment.adapter
+            offscreenPageLimit = ShowPagerAdapter.OFFSCREEN_PAGE_LIMIT as Int
+            registerOnPageChangeCallback(
+                object : ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        Log.d("ShowFragment", "Here")
+                    }
+                }
+            )
+
+            val mediator = TabLayoutMediator(
+                binding.tabLayout,
+                this
+            ) { currentTab, currentPosition ->
+                currentTab.text = when (currentPosition) {
+                    EPISODES_POSITION -> getString(R.string.episodes)
+                    CAST_POSITION -> getString(R.string.cast)
+                    else -> throw IllegalStateException("Invalid view pager position")
+                }
+            }
+
+            mediator.attach()
+        }
 
         setUpCollection()
 
@@ -93,6 +141,29 @@ class ShowFragment : Fragment() {
                 .makeText(requireContext(), throwable.message, Toast.LENGTH_LONG)
                 .show()
         }
+    }
+
+    private class ShowPagerAdapter(
+        private val fragmentActivity: FragmentActivity,
+        private val episodesFragmentProvider: Provider<EpisodesFragment>,
+        private val castFragmentProvider: Provider<CastFragment>
+    ) : FragmentStateAdapter(fragmentActivity) {
+
+        override fun getItemCount(): Int = TAB_COUNT
+
+        override fun createFragment(position: Int): Fragment = when (position) {
+            EPISODES_POSITION -> episodesFragmentProvider.get()
+            CAST_POSITION -> castFragmentProvider.get()
+            else -> throw IllegalStateException("Invalid view pager position")
+        }
+
+        companion object {
+            const val TAB_COUNT = 2
+            const val EPISODES_POSITION = 0
+            const val CAST_POSITION = 1
+            const val OFFSCREEN_PAGE_LIMIT: Int = 1
+        }
+
     }
 
 }
