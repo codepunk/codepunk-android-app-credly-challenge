@@ -42,8 +42,6 @@ class CastFragment @Inject constructor() : Fragment() {
 
         setUpCollection()
 
-        val a = arguments
-        Log.d("CastFragment", "onViewCreated: arguments=$a")
         val showId = requireArguments().getInt(BuildConfig.KEY_SHOW_ID)
         viewModel.getCast(showId)
     }

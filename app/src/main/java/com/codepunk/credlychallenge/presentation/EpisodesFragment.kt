@@ -42,8 +42,6 @@ class EpisodesFragment @Inject constructor() : Fragment() {
 
         setUpCollection()
 
-        val a = arguments
-        Log.d("EpisodeFragment", "onViewCreated: arguments=$a")
         val showId = requireArguments().getInt(BuildConfig.KEY_SHOW_ID)
         viewModel.getEpisodes(showId)
     }
