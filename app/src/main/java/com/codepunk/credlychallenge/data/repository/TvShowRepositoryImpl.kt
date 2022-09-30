@@ -6,7 +6,6 @@ import com.codepunk.credlychallenge.data.mapper.toLocalModel
 import com.codepunk.credlychallenge.data.remote.api.TvShowApi
 import com.codepunk.credlychallenge.domain.model.CastEntry
 import com.codepunk.credlychallenge.domain.model.Episode
-import com.codepunk.credlychallenge.domain.model.SearchResult
 import com.codepunk.credlychallenge.domain.model.Show
 import com.codepunk.credlychallenge.domain.repository.TvShowRepository
 import kotlinx.coroutines.flow.Flow
@@ -17,14 +16,6 @@ class TvShowRepositoryImpl @Inject constructor(
     private val tvShowApi: TvShowApi,
     private val showDao: ShowDao
 ) : TvShowRepository {
-
-    override fun searchShows(query: String): Flow<List<SearchResult>> = flow {
-        emit(
-            tvShowApi.searchShows(query).map {
-                it.toDomainModel()
-            }
-        )
-    }
 
     override fun getShow(id: Int): Flow<Show?> = flow {
         val show = showDao.getShow(id)?.toDomainModel() ?: run {

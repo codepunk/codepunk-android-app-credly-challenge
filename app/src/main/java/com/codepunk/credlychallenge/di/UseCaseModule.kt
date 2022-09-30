@@ -39,11 +39,4 @@ class UseCaseModule {
         getCast(showId, tvShowRepository)
     }
 
-    @Provides
-    fun provideSearchShowsUseCase(
-        tvShowRepository: TvShowRepository
-    ): SearchShowsUseCase = SearchShowsUseCase { query ->
-        searchShows(query, tvShowRepository)
-    }
-
 }
