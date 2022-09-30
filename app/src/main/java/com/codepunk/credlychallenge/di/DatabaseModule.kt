@@ -2,7 +2,7 @@ package com.codepunk.credlychallenge.di
 
 import android.content.Context
 import androidx.room.Room
-import com.codepunk.credlychallenge.data.local.dao.ShowDao
+import com.codepunk.credlychallenge.data.local.dao.*
 import com.codepunk.credlychallenge.data.local.database.TvShowDatabase
 import dagger.Module
 import dagger.Provides
@@ -31,7 +31,31 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideRocketDao(database: TvShowDatabase): ShowDao {
+    fun provideCastEntryDao(database: TvShowDatabase): CastEntryDao {
+        return database.castEntryDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCharacterDao(database: TvShowDatabase): CharacterDao {
+        return database.characterDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideEpisodeDao(database: TvShowDatabase): EpisodeDao {
+        return database.episodeDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providePersonDao(database: TvShowDatabase): PersonDao {
+        return database.personDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideShowDao(database: TvShowDatabase): ShowDao {
         return database.showDao()
     }
 

@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface TvShowRepository {
 
-    fun getShow(id: Int): Flow<Show?>
+    fun getShow(showId: Int): Flow<Show?>
 
-    fun getShows(ids: List<Int>): Flow<List<Show>>
+    fun getShows(showIds: List<Int>): Flow<List<Show>>
 
-    fun getEpisodes(id: Int): Flow<List<Episode>>
+    fun getEpisodes(showId: Int): Flow<List<Episode>>
 
-    fun getCast(id: Int): Flow<List<CastEntry>>
+    fun getCast(showId: Int): Flow<List<CastEntry>>
 
 }

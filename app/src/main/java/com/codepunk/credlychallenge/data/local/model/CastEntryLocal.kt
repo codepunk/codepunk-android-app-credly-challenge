@@ -6,8 +6,14 @@ import androidx.room.ForeignKey
 
 @Entity(
     tableName = "cast",
-    primaryKeys = ["person_id", "character_id"],
+    primaryKeys = ["show_id", "person_id", "character_id"],
     foreignKeys = [
+        ForeignKey(
+            entity = ShowLocal::class,
+            parentColumns = ["id"],
+            childColumns = ["show_id"],
+            onDelete = ForeignKey.CASCADE
+        ),
         ForeignKey(
             entity = PersonLocal::class,
             parentColumns = ["id"],
@@ -21,6 +27,9 @@ import androidx.room.ForeignKey
     ]
 )
 data class CastEntryLocal(
+    @ColumnInfo(name = "show_id")
+    val showId: Int,
+
     @ColumnInfo(name = "person_id")
     val personId: Int,
 
