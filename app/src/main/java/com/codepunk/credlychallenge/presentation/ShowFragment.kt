@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,18 +15,22 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
+import com.codepunk.credlychallenge.BuildConfig
 import com.codepunk.credlychallenge.MainActivity
 import com.codepunk.credlychallenge.R
 import com.codepunk.credlychallenge.databinding.FragmentShowBinding
 import com.codepunk.credlychallenge.domain.model.Show
-import com.codepunk.credlychallenge.presentation.ShowFragment.ShowPagerAdapter.Companion.CAST_POSITION
-import com.codepunk.credlychallenge.presentation.ShowFragment.ShowPagerAdapter.Companion.EPISODES_POSITION
 import com.codepunk.credlychallenge.util.consume
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
+
+const val TAB_COUNT = 2
+const val EPISODES_POSITION = 0
+const val CAST_POSITION = 1
+const val OFFSCREEN_PAGE_LIMIT: Int = 1
 
 @AndroidEntryPoint
 class ShowFragment : Fragment() {
@@ -59,14 +62,10 @@ class ShowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = ShowPagerAdapter(
-            requireActivity(),
-            episodesFragmentProvider,
-            castFragmentProvider
-        )
+        adapter = ShowPagerAdapter()
         with(binding.viewPager) {
             adapter = this@ShowFragment.adapter
-            offscreenPageLimit = ShowPagerAdapter.OFFSCREEN_PAGE_LIMIT as Int
+            offscreenPageLimit = OFFSCREEN_PAGE_LIMIT as Int
             registerOnPageChangeCallback(
                 object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {
@@ -127,8 +126,7 @@ class ShowFragment : Fragment() {
 
     private fun onResult(result: Result<Show?>) {
         result.onSuccess {
-            // showAdapter.shows = it
-            when (val imageUrl = it?.images?.get("original")) {
+            when (val imageUrl = it?.images?.original) {
                 null -> binding.showImage.setImageDrawable(null)
                 else -> binding.showImage.load(imageUrl)
             }
@@ -143,25 +141,22 @@ class ShowFragment : Fragment() {
         }
     }
 
-    private class ShowPagerAdapter(
-        private val fragmentActivity: FragmentActivity,
-        private val episodesFragmentProvider: Provider<EpisodesFragment>,
-        private val castFragmentProvider: Provider<CastFragment>
-    ) : FragmentStateAdapter(fragmentActivity) {
+    private inner class ShowPagerAdapter() : FragmentStateAdapter(requireActivity()) {
 
         override fun getItemCount(): Int = TAB_COUNT
 
         override fun createFragment(position: Int): Fragment = when (position) {
-            EPISODES_POSITION -> episodesFragmentProvider.get()
-            CAST_POSITION -> castFragmentProvider.get()
+            EPISODES_POSITION -> episodesFragmentProvider.get().apply {
+                this.arguments = Bundle().apply {
+                    putInt(BuildConfig.KEY_SHOW_ID, args.showId)
+                }
+            }
+            CAST_POSITION -> castFragmentProvider.get().apply {
+                this.arguments = Bundle().apply {
+                    putInt(BuildConfig.KEY_SHOW_ID, args.showId)
+                }
+            }
             else -> throw IllegalStateException("Invalid view pager position")
-        }
-
-        companion object {
-            const val TAB_COUNT = 2
-            const val EPISODES_POSITION = 0
-            const val CAST_POSITION = 1
-            const val OFFSCREEN_PAGE_LIMIT: Int = 1
         }
 
     }

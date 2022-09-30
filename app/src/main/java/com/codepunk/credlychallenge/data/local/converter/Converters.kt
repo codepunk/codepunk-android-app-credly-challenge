@@ -1,6 +1,7 @@
-package com.codepunk.credlychallenge.data.local.converters
+package com.codepunk.credlychallenge.data.local.converter
 
 import androidx.room.TypeConverter
+import com.codepunk.credlychallenge.data.local.model.ImagesLocal
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -29,4 +30,17 @@ object Converters {
     @TypeConverter
     fun toString(date: LocalDate?): String? = date?.toString()
 
+    @TypeConverter
+    fun toImages(value: String?): ImagesLocal? =
+        value?.run {
+            val imagesLocal = Json.decodeFromString<ImagesLocal>(this)
+            imagesLocal
+        }
+
+    @TypeConverter
+    fun toString(images: ImagesLocal?): String? =
+        images?.run {
+            val string = Json.encodeToString(this)
+            string
+        }
 }

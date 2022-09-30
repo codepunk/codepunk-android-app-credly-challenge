@@ -41,7 +41,7 @@ data class ShowLocal(
     @ColumnInfo(name = "official_site")
     val officialSite: String?,
 
-    val images: Map<String, String>?,
+    val images: ImagesLocal?,
 
     val summary: String?
 )

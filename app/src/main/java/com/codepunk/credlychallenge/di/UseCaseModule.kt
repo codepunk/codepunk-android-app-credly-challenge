@@ -26,6 +26,20 @@ class UseCaseModule {
     }
 
     @Provides
+    fun provideGetEpisodesUseCase(
+        tvShowRepository: TvShowRepository
+    ): GetEpisodesUseCase = GetEpisodesUseCase { showId ->
+        getEpisodes(showId, tvShowRepository)
+    }
+
+    @Provides
+    fun provideGetCastUseCase(
+        tvShowRepository: TvShowRepository
+    ): GetCastUseCase = GetCastUseCase { showId ->
+        getCast(showId, tvShowRepository)
+    }
+
+    @Provides
     fun provideSearchShowsUseCase(
         tvShowRepository: TvShowRepository
     ): SearchShowsUseCase = SearchShowsUseCase { query ->

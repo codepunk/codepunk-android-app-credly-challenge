@@ -4,6 +4,8 @@ import com.codepunk.credlychallenge.data.local.dao.ShowDao
 import com.codepunk.credlychallenge.data.mapper.toDomainModel
 import com.codepunk.credlychallenge.data.mapper.toLocalModel
 import com.codepunk.credlychallenge.data.remote.api.TvShowApi
+import com.codepunk.credlychallenge.domain.model.CastEntry
+import com.codepunk.credlychallenge.domain.model.Episode
 import com.codepunk.credlychallenge.domain.model.SearchResult
 import com.codepunk.credlychallenge.domain.model.Show
 import com.codepunk.credlychallenge.domain.repository.TvShowRepository
@@ -52,4 +54,19 @@ class TvShowRepositoryImpl @Inject constructor(
         emit(list.toList())
     }
 
+    override fun getEpisodes(id: Int): Flow<List<Episode>> = flow {
+        emit(
+            tvShowApi.getEpisodes(id).map {
+                it.toDomainModel()
+            }
+        )
+    }
+
+    override fun getCast(id: Int): Flow<List<CastEntry>> = flow {
+        emit(
+            tvShowApi.getCast(id).map {
+                it.toDomainModel()
+            }
+        )
+    }
 }

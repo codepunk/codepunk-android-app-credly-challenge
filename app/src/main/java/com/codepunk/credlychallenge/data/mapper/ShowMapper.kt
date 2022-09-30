@@ -17,7 +17,7 @@ fun ShowRemote.toDomainModel(): Show = Show(
     premiered,
     ended,
     officialSite,
-    images,
+    images?.toDomainModel(),
     summary
 )
 
@@ -34,7 +34,7 @@ fun Show.toLocalModel(): ShowLocal = ShowLocal(
     premiered,
     ended,
     officialSite,
-    images,
+    images?.toLocalModel(),
     summary
 )
 
@@ -51,6 +51,6 @@ fun ShowLocal.toDomainModel(): Show = Show(
     premiered,
     ended,
     officialSite,
-    images,
+    images?.toDomainModel(),
     summary
 )

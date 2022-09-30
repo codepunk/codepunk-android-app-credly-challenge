@@ -1,5 +1,6 @@
 package com.codepunk.credlychallenge.data.remote.model
 
+import com.codepunk.credlychallenge.domain.model.Images
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
@@ -31,7 +32,7 @@ data class ShowRemote(
     val officialSite: String?,
 
     @SerialName("image")
-    val images: Map<String, String>?,
+    val images: ImagesRemote?,
 
     val summary: String?
 )

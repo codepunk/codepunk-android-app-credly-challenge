@@ -1,6 +1,7 @@
 package com.codepunk.credlychallenge.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.codepunk.credlychallenge.BuildConfig
 import com.codepunk.credlychallenge.databinding.FragmentCastBinding
-import com.codepunk.credlychallenge.domain.model.Show
+import com.codepunk.credlychallenge.domain.model.CastEntry
 import com.codepunk.credlychallenge.util.consume
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -40,7 +42,10 @@ class CastFragment @Inject constructor() : Fragment() {
 
         setUpCollection()
 
-        // TODO viewModel.getCast(args.showId)
+        val a = arguments
+        Log.d("CastFragment", "onViewCreated: arguments=$a")
+        val showId = requireArguments().getInt(BuildConfig.KEY_SHOW_ID)
+        viewModel.getCast(showId)
     }
 
     private fun setUpCollection() {
@@ -51,7 +56,7 @@ class CastFragment @Inject constructor() : Fragment() {
                 }
 
                 launch {
-                    viewModel.showResult.collect { onResult(it) }
+                    viewModel.castResult.collect { onResult(it) }
                 }
 
                 launch {
@@ -69,7 +74,7 @@ class CastFragment @Inject constructor() : Fragment() {
         }
     }
 
-    private fun onResult(result: Result<Show?>) {
+    private fun onResult(result: Result<List<CastEntry>>) {
         result.onSuccess {
             // TODO
         }
