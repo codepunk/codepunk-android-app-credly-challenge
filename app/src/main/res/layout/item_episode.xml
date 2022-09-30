@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.text.Html"/>
+        <variable
+            name="episode"
+            type="com.codepunk.credlychallenge.domain.model.Episode"
+            />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:padding="@dimen/default_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:id="@+id/episode_thumbnail"
+            android:layout_width="@dimen/default_image_size"
+            android:layout_height="@dimen/default_image_size"
+            android:contentDescription="@string/content_description_show_thumbnail"
+            app:bindThumbnail="@{episode.images}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/episode_name"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text='@{`"` + episode.name + `"`}'
+            app:layout_constraintStart_toEndOf="@id/episode_thumbnail"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textStyle="bold|italic"
+            tools:text='"Episode Name"'
+            />
+
+        <TextView
+            android:id="@+id/episode_airdate_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:text="@string/airdate_label"
+            android:textStyle="bold"
+            android:visibility="@{episode.airDate == null ? View.GONE : View.VISIBLE}"
+            app:layout_constraintStart_toEndOf="@id/episode_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/episode_name"
+            app:layout_constraintBottom_toTopOf="@id/show_ended_label"
+            />
+
+        <TextView
+            android:id="@+id/episode_airdate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            app:bindLocalDate="@{episode.airDate}"
+            android:visibility="@{episode.airDate == null ? View.GONE : View.VISIBLE}"
+            app:layout_constraintStart_toEndOf="@id/episode_airdate_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@id/episode_airdate_label"
+            tools:text="January 4, 1989"
+            />
+
+        <TextView
+            android:id="@+id/summary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@{Html.fromHtml(episode.summary)}"
+            app:layout_constraintStart_toEndOf="@id/episode_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/episode_airdate_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Hijinks ensued."
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

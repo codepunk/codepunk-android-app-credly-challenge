@@ -6,6 +6,7 @@
 
     <string name="premiered_label">Premiered:</string>
     <string name="ended_label">Ended:</string>
+    <string name="airdate_label">Air date:</string>
 
     <string name="content_description_show_image">Show image</string>
     <string name="content_description_show_thumbnail">Show thumbnail</string>
