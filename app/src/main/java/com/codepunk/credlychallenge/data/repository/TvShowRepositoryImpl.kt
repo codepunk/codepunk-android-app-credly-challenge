@@ -17,7 +17,6 @@
 
 package com.codepunk.credlychallenge.data.repository
 
-import android.util.Log
 import com.codepunk.credlychallenge.data.local.dao.*
 import com.codepunk.credlychallenge.data.mapper.toDomainModel
 import com.codepunk.credlychallenge.data.mapper.toLocalModel
