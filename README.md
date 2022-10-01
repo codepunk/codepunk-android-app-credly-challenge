@@ -4,6 +4,8 @@ This is an app that displays a list of (some of my favorite) shows. The user can
 
 The API can be found at [TVMaze API](https://www.tvmaze.com/api).
 
+Minimum Android SDK required: 26 (Oreo)
+
 ## Libraries used
 
 This challenge app makes use of the following libraries:
