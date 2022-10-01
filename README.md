@@ -30,6 +30,8 @@ I challenged myself in the show detail screen by including a tab control with tw
 
 Related to clean architecture, I make use of a "**S**ingle **S**ource **O**f **T**ruth" when it comes to data. All data is saved to a local database and that database is used as the SSOT. Once the list of shows has been downloaded as well as a show's episodes and cast lists, for example, that data should be readily available the next time you open the app, even if there is no internet connectivity. (There may be unpredictable results when it comes to images, however, as I didn't spend any time managing Coil's approach to storing/purging image data.)
 
+For lack of anywhere better to put this, you'll see lots of comments in the code like `// region Methods` or `// endregion Properties`. These comments tell IDEs like Android Studio or IntelliJ IDEA where natural sections of files begin and end. They also allow for code folding at those defined endpoints, which greatly helps navigation of large files. You can see the defined sections in Android Studio's "Structure" view (**View | Tool Windows | Structure** or `⌘7` on Mac / `Alt+7` on Windows). All of the sections defined using `region`/`endregion`  show up as collapsible sections in that tool window, and are also collapsible in the editor window itself.
+
 ## Thoughts
 
 Here are a few things I was aware of while creating this app. Call them thoughts, or areas for improvement.

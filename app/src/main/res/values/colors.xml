@@ -26,7 +26,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="white_70">#B3FFFFFF</color>
 
-    <color name="gradient_start">#B0000000</color>
+    <color name="gradient_start">#A0000000</color>
     <color name="gradient_end">@android:color/transparent</color>
 
     <color name="default_thumbnail_background">#FFD0D0FF</color>

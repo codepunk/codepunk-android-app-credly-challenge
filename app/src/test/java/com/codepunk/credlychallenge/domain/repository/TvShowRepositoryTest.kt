@@ -15,20 +15,14 @@
  *
  */
 
-package com.codepunk.credlychallenge.domain.usecase
+package com.codepunk.credlychallenge.domain.repository
 
-import com.codepunk.credlychallenge.domain.model.CastEntry
-import com.codepunk.credlychallenge.domain.repository.TvShowRepository
-import com.codepunk.credlychallenge.util.resultOf
-import kotlinx.coroutines.flow.Flow
+class TvShowRepositoryTest {
 
-/**
- * Use case for getting the cast related to a show.
- */
-
-fun interface GetCastUseCase : suspend (Int) -> Flow<Result<List<CastEntry>>>
-
-fun getCast(
-    showId: Int,
-    tvShowRepository: TvShowRepository
-): Flow<Result<List<CastEntry>>> = resultOf { tvShowRepository.getCast(showId) }
+    /*
+    val flow = tvShowRepository.getShows(DEFAULT_SHOW_IDS)
+            val list = flow.firstOrNull()
+            assert(list != null)
+            assert(true)
+     */
+}

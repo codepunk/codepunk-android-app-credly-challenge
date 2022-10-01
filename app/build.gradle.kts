@@ -82,7 +82,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
-    implementation("com.google.dagger:hilt-android:2.43.2")
+    implementation("com.google.dagger:hilt-android:2.44")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
@@ -96,11 +96,18 @@ dependencies {
     implementation("io.coil-kt:coil:2.2.1")
     annotationProcessor("androidx.room:room-compiler:2.4.3")
     kapt("androidx.room:room-compiler:2.4.3")
-    kapt("com.google.dagger:hilt-android-compiler:2.43.2")
-    testImplementation("junit:junit:4.13.2")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    //testImplementation("junit.junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:4.0.0")
+    testImplementation("org.mockito:mockito-inline:2.13.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.7.20")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.navigation:navigation-testing:2.5.2")
+    androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
+
 }
 
 // Allow references to generated code

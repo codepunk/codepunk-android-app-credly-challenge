@@ -15,20 +15,18 @@
  *
  */
 
-package com.codepunk.credlychallenge.domain.usecase
+package com.codepunk.credlychallenge
 
-import com.codepunk.credlychallenge.domain.model.CastEntry
-import com.codepunk.credlychallenge.domain.repository.TvShowRepository
-import com.codepunk.credlychallenge.util.resultOf
-import kotlinx.coroutines.flow.Flow
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.junit.MockitoJUnitRunner
 
-/**
- * Use case for getting the cast related to a show.
- */
+@RunWith(MockitoJUnitRunner::class)
+class ShowListViewModelTest {
 
-fun interface GetCastUseCase : suspend (Int) -> Flow<Result<List<CastEntry>>>
+    @Test
+    fun `assert should return true`() {
+        assert(true)
+    }
 
-fun getCast(
-    showId: Int,
-    tvShowRepository: TvShowRepository
-): Flow<Result<List<CastEntry>>> = resultOf { tvShowRepository.getCast(showId) }
+}
