@@ -40,6 +40,7 @@ Here are a few things I was aware of while creating this app. Call them thoughts
 4. I believe new apps should make use of Jetpack Compose. However, as I am still very new to Compose, in the interest of time I used the more traditional XML view approach.
 5. There is some very rudimentary error handling. Errors are indeed caught but in order to save time, a simple Toast with a generic error message is displayed. (If you turn on airplane mode and attempt to click into a show you haven't yet visited, for example, you'll see such an error message appear for a second or two.)
 6. In a list like the episodes list, I would normally break that list up by season and add headers for each season. This is not only an Android 101 task but actually a bit time-consuming, so I left it out for now, opting for displaying the season and episode numbers in each episode in the list.
+7. I really wanted to make a fun icon for the application but that's the kind of thing I can spend way too much time on, so you're getting the stock Android app icon. ☺️
 
 # Thank you
 Thanks for a fun and challenging idea for a code challenge! I hope you enjoyed playing around with it.
