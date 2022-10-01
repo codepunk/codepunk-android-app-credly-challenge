@@ -2,7 +2,7 @@
 
 This is an app that displays a list of (some of my favorite) shows. The user can click on any show to see a detail page about the given show. The detail page contains both a list of episodes and a cast list.
 
-The API can be found at [TVMaze API](https://www.tvmaze.com/api).
+The API used can be found at [TVMaze API](https://www.tvmaze.com/api).
 
 Minimum Android SDK required: 26 (Oreo)
 
@@ -50,6 +50,9 @@ Here are a few things I was aware of while creating this app. Call them thoughts
 7. Related to the above, if there is no internet connectivity thereby preventing a screen from loading its data, and then connectivity is restored, a truly helpful app would catch that and make a new attempt to load that data. There is no such flow in this app.
 8. In a list like the episodes list, I would normally break that list up by season and add headers for each season. This is not only an Android 101 task but actually a bit time-consuming, so I left it out for now, opting for displaying the season and episode numbers in each episode in the list.
 9. I really wanted to make a fun icon for the application but that's the kind of thing I can spend way too much time on, so you're getting the stock Android app icon. ☺️
+
+## Personal Note
+I had to wrap up this project earlier than intended as I am on my way to SW Florida to help out some members of my family as they clean up from Hurricane Ian. Although this change of plans did affect the test portion of the project (as there are no UI/instrumentation tests and an incomplete but substantial collection of unit tests), I hope that the included tests (centered around Use Cases and data repository) are adequate in imparting my knowledge when it comes to writing effective tests.
 
 # Thank you
 Thanks for a fun and challenging idea for a code challenge! I hope you enjoyed playing around with it.
