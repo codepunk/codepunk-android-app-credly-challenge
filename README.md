@@ -17,7 +17,7 @@ This challenge app makes use of the following libraries:
 - Jetpack Navigation
 - Room
 - Coil image downloader
-- Mockk for unit tests
+- Mockito for unit tests
 
 ## Goals
 
