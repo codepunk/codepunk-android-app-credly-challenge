@@ -49,7 +49,7 @@
             />
 
         <TextView
-            android:id="@+id/character_name"
+            android:id="@+id/episode_name"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -64,7 +64,51 @@
             />
 
         <TextView
-            android:id="@+id/person_name"
+            android:id="@+id/episode_season_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:text="@string/season_label"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/character_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/episode_name"
+            />
+
+        <TextView
+            android:id="@+id/episode_season"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:text="@{Integer.toString(episode.season)}"
+            app:layout_constraintStart_toEndOf="@id/episode_season_label"
+            app:layout_constraintBaseline_toBaselineOf="@id/episode_season_label"
+            tools:text="1"
+            />
+
+        <TextView
+            android:id="@+id/episode_number_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:text="@string/number_label"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/episode_season"
+            app:layout_constraintTop_toBottomOf="@id/episode_name"
+            />
+
+        <TextView
+            android:id="@+id/episode_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:text="@{Integer.toString(episode.number)}"
+            app:layout_constraintStart_toEndOf="@id/episode_number_label"
+            app:layout_constraintBaseline_toBaselineOf="@id/episode_number_label"
+            tools:text="1"
+            />
+
+        <TextView
+            android:id="@+id/episode_airdate_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
@@ -72,7 +116,7 @@
             android:textStyle="bold"
             android:visibility="@{episode.airDate == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintStart_toEndOf="@id/character_thumbnail"
-            app:layout_constraintTop_toBottomOf="@id/character_name"
+            app:layout_constraintTop_toBottomOf="@id/episode_season_label"
             app:layout_constraintBottom_toTopOf="@id/summary"
             />
 
@@ -83,9 +127,9 @@
             android:layout_marginStart="@dimen/default_margin"
             app:bindLocalDate="@{episode.airDate}"
             android:visibility="@{episode.airDate == null ? View.GONE : View.VISIBLE}"
-            app:layout_constraintStart_toEndOf="@id/person_name"
+            app:layout_constraintStart_toEndOf="@id/episode_airdate_label"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBaseline_toBaselineOf="@id/person_name"
+            app:layout_constraintBaseline_toBaselineOf="@id/episode_airdate_label"
             tools:text="January 4, 1989"
             />
 
@@ -97,7 +141,7 @@
             android:layout_marginTop="@dimen/default_margin"
             android:text="@{Html.fromHtml(episode.summary)}"
             app:layout_constraintStart_toEndOf="@id/character_thumbnail"
-            app:layout_constraintTop_toBottomOf="@id/person_name"
+            app:layout_constraintTop_toBottomOf="@id/episode_airdate_label"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Hijinks ensued."
             />

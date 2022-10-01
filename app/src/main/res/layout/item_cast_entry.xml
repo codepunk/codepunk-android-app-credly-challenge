@@ -48,7 +48,7 @@
             />
 
         <TextView
-            android:id="@+id/character_name"
+            android:id="@+id/episode_name"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             android:text="@{castEntry.person.name}"
             android:visibility="@{castEntry.person.name == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintStart_toEndOf="@id/character_thumbnail"
-            app:layout_constraintTop_toBottomOf="@id/character_name"
+            app:layout_constraintTop_toBottomOf="@id/episode_name"
             tools:text="Person Name"
             />
 
