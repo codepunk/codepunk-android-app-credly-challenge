@@ -15,12 +15,17 @@
  *
  */
 
-package com.codepunk.credlychallenge.domain.model
+package com.codepunk.credlychallenge.util
+
+import android.content.Context
+import android.widget.Toast
+import com.codepunk.credlychallenge.R
 
 /**
- * An entity containing a set of image URLs as retrieved via remote API.
+ * Shows a default error toast on the supplied [Context] using the supplied [Throwable].
+ * If no throwable is supplied, displays a default error message.
  */
-data class Images(
-    val medium: String?,
-    val original: String?
-)
+fun Context.showErrorToast(throwable: Throwable? = null) {
+    val message = throwable?.message ?: getString(R.string.generic_error)
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}

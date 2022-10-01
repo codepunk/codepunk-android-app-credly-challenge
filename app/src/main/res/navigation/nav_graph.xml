@@ -1,30 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2022 Scott Slater
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/shows_fragment"
+    app:startDestination="@id/show_list_fragment"
     >
 
     <fragment
-        android:id="@+id/shows_fragment"
-        android:name="com.codepunk.credlychallenge.presentation.ShowsFragment"
+        android:id="@+id/show_list_fragment"
+        android:name="com.codepunk.credlychallenge.presentation.ShowListFragment"
         android:label="@string/shows"
-        tools:layout="@layout/fragment_shows"
+        tools:layout="@layout/fragment_show_list"
         >
 
         <action
-            android:id="@+id/action_shows_to_show"
-            app:destination="@id/show_fragment"
+            android:id="@+id/action_show_list_to_show_details"
+            app:destination="@id/show_details_fragment"
             />
 
     </fragment>
 
     <fragment
-        android:id="@+id/show_fragment"
-        android:name="com.codepunk.credlychallenge.presentation.ShowFragment"
-        tools:layout="@layout/fragment_show"
+        android:id="@+id/show_details_fragment"
+        android:name="com.codepunk.credlychallenge.presentation.ShowDetailsFragment"
+        tools:layout="@layout/fragment_show_details"
         >
         <argument
             android:name="show_id"

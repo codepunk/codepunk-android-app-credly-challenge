@@ -19,8 +19,8 @@ package com.codepunk.credlychallenge.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.codepunk.credlychallenge.domain.model.Episode
-import com.codepunk.credlychallenge.domain.usecase.GetEpisodesUseCase
+import com.codepunk.credlychallenge.domain.model.Show
+import com.codepunk.credlychallenge.domain.usecase.GetShowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,11 +28,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * A [ViewModel] used for business logic related to the episodes of a show.
+ * A [ViewModel] used for business logic related to the details of a show.
  */
 @HiltViewModel
-class EpisodesViewModel @Inject constructor(
-    val getEpisodesUseCase: GetEpisodesUseCase
+class ShowDetailsViewModel @Inject constructor(
+    val getShowUseCase: GetShowUseCase
 ) : ViewModel() {
 
     // region Properties
@@ -44,11 +44,10 @@ class EpisodesViewModel @Inject constructor(
     val loading = _loading.asStateFlow()
 
     /**
-     * The retrieved episode list associated with the supplied show ID.
+     * The retrieved details associated with the supplied show ID.
      */
-    private val _episodes =
-        MutableStateFlow<List<Episode>>(emptyList())
-    val episodes = _episodes.asStateFlow()
+    private val _showDetails = MutableStateFlow<Show?>(null)
+    val showDetails = _showDetails.asStateFlow()
 
     /**
      * A [Lazy] error, allowing the view to react a single time to changes.
@@ -61,15 +60,15 @@ class EpisodesViewModel @Inject constructor(
     // region Methods
 
     /**
-     * Gets the list of episodes and sets loading, result & error information as appropriate.
+     * Gets the show details and sets loading, result & error information as appropriate.
      */
-    fun getEpisodes(showId: Int) {
+    fun getShowDetails(showId: Int) {
         viewModelScope.launch {
             _loading.value = true
-            getEpisodesUseCase(showId)
+            getShowUseCase(showId)
                 .collect { result ->
                     result.onSuccess {
-                        _episodes.value = it
+                        _showDetails.value = it
                         _error.value = null
                     }.onFailure {
                         _error.value = lazy { it }

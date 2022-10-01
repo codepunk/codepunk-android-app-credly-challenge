@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2022 Scott Slater
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package com.codepunk.credlychallenge.presentation
 
 import android.annotation.SuppressLint
@@ -5,7 +22,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,14 +38,18 @@ import com.codepunk.credlychallenge.databinding.FragmentEpisodesBinding
 import com.codepunk.credlychallenge.databinding.ItemEpisodeBinding
 import com.codepunk.credlychallenge.domain.model.Episode
 import com.codepunk.credlychallenge.util.consume
+import com.codepunk.credlychallenge.util.showErrorToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * A [Fragment] for displaying a list of episodes for a given show.
+ */
 @AndroidEntryPoint
 class EpisodesFragment @Inject constructor() : Fragment() {
 
-    // private val args: ShowFragmentArgs by navArgs()
+    // region Properties
 
     private val viewModel: EpisodesViewModel by viewModels()
 
@@ -37,15 +57,25 @@ class EpisodesFragment @Inject constructor() : Fragment() {
 
     private val episodeAdapter = EpisodeAdapter()
 
+    // endregion Properties
+
+    // region Lifecycle methods
+
+    /**
+     * Inflates the view and creates the view binding.
+     */
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = FragmentEpisodesBinding.inflate(inflater)
-        .apply {
-            binding = this
-        }
+    ): View = FragmentEpisodesBinding
+        .inflate(inflater)
+        .apply { binding = this }
         .root
 
+    /**
+     * Sets up widgets, begins data collection, and gets the episodes for the supplied show ID.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -59,66 +89,83 @@ class EpisodesFragment @Inject constructor() : Fragment() {
             adapter = episodeAdapter
         }
 
-        setUpCollection()
+        setUpDataCollection()
 
-        val showId = requireArguments().getInt(BuildConfig.KEY_SHOW_ID)
-        viewModel.getEpisodes(showId)
+        if (savedInstanceState == null) {
+            val showId = requireArguments().getInt(BuildConfig.KEY_SHOW_ID)
+            viewModel.getEpisodes(showId)
+        }
     }
 
-    private fun setUpCollection() {
+    // endregion Lifecycle methods
+
+    // region Methods
+
+    /**
+     * Listens for and responds to changes to data contained in [EpisodesViewModel].
+     */
+    private fun setUpDataCollection() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.loading.collect { onLoading(it) }
+                    viewModel.loading.collect { isLoading ->
+                        binding.progressBar.apply { if (isLoading) show() else hide() }
+                    }
+
                 }
 
                 launch {
-                    viewModel.episodesResult.collect { onResult(it) }
+                    viewModel.episodes.collect { episodeAdapter.episodes = it }
                 }
 
                 launch {
-                    viewModel.showError.collect { onError(it) }
+                    viewModel.error.collect {
+                        it?.consume { requireContext().showErrorToast() }
+                    }
                 }
             }
         }
     }
 
-    private fun onLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.show()
-        } else {
-            binding.progressBar.hide()
-        }
-    }
+    // endregion Methods
 
-    private fun onResult(result: Result<List<Episode>>) {
-        result.onSuccess {
-            episodeAdapter.episodes = it
-        }
-    }
+    // region Nested & inner classes
 
-    private fun onError(error: Lazy<Throwable>?) {
-        error?.consume { throwable ->
-            Toast
-                .makeText(requireContext(), throwable.message, Toast.LENGTH_LONG)
-                .show()
-        }
-    }
-
+    /**
+     * A [ViewHolder] used to populating a single item in the episodes [RecyclerView].
+     */
     private class EpisodeViewHolder(val binding: ItemEpisodeBinding) : ViewHolder(binding.root) {
+
+        // region Methods
+
         fun bind(episode: Episode) {
             binding.episode = episode
         }
+
+        // endregion Methods
+
     }
 
-    private class EpisodeAdapter() : RecyclerView.Adapter<EpisodeViewHolder>() {
+    /**
+     * A [RecyclerView.Adapter] that coordinates items in the episodes [RecyclerView].
+     */
+    private class EpisodeAdapter : RecyclerView.Adapter<EpisodeViewHolder>() {
 
+        // region Properties
+
+        /**
+         * The episodes associated with the current show.
+         */
         var episodes: List<Episode> = emptyList()
             @SuppressLint("NotifyDataSetChanged")
             set(value) {
                 field = value
                 notifyDataSetChanged()
             }
+
+        // endregion Properties
+
+        // region Overridden methods
 
         override fun getItemCount(): Int = episodes.size
 
@@ -139,6 +186,10 @@ class EpisodesFragment @Inject constructor() : Fragment() {
             }
         }
 
+        // endregion Overridden methods
+
     }
+
+    // endregion Nested & inner classes
 
 }

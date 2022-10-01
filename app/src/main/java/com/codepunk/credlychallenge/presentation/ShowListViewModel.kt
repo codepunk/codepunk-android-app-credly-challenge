@@ -19,8 +19,8 @@ package com.codepunk.credlychallenge.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.codepunk.credlychallenge.domain.model.Episode
-import com.codepunk.credlychallenge.domain.usecase.GetEpisodesUseCase
+import com.codepunk.credlychallenge.domain.model.Show
+import com.codepunk.credlychallenge.domain.usecase.GetShowsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,11 +28,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * A [ViewModel] used for business logic related to the episodes of a show.
+ * A [ViewModel] used for business logic related to the initial list of shows presented
+ * by this application.
  */
 @HiltViewModel
-class EpisodesViewModel @Inject constructor(
-    val getEpisodesUseCase: GetEpisodesUseCase
+class ShowListViewModel @Inject constructor(
+    private val getShowsUseCase: GetShowsUseCase
 ) : ViewModel() {
 
     // region Properties
@@ -44,11 +45,10 @@ class EpisodesViewModel @Inject constructor(
     val loading = _loading.asStateFlow()
 
     /**
-     * The retrieved episode list associated with the supplied show ID.
+     * The retrieved list of shows.
      */
-    private val _episodes =
-        MutableStateFlow<List<Episode>>(emptyList())
-    val episodes = _episodes.asStateFlow()
+    private val _shows = MutableStateFlow<List<Show>>(emptyList())
+    val shows = _shows.asStateFlow()
 
     /**
      * A [Lazy] error, allowing the view to react a single time to changes.
@@ -61,15 +61,16 @@ class EpisodesViewModel @Inject constructor(
     // region Methods
 
     /**
-     * Gets the list of episodes and sets loading, result & error information as appropriate.
+     * Gets the list of shows and sets loading, result & error information as appropriate.
      */
-    fun getEpisodes(showId: Int) {
+    fun getDefaultShows() {
         viewModelScope.launch {
             _loading.value = true
-            getEpisodesUseCase(showId)
+            val ids = defaultShows.values.toList()
+            getShowsUseCase(ids)
                 .collect { result ->
                     result.onSuccess {
-                        _episodes.value = it
+                        _shows.value = it
                         _error.value = null
                     }.onFailure {
                         _error.value = lazy { it }
@@ -80,5 +81,30 @@ class EpisodesViewModel @Inject constructor(
     }
 
     // endregion Methods
+
+    companion object {
+
+        // region Properties
+
+        /**
+         * A map containing names and IDs of a default list of shows
+         * for display by this application.
+         */
+        private val defaultShows: Map<String, Int> = mapOf(
+            "Brooklyn Nine-Nine" to 49,
+            "Cheers" to 553,
+            "Friends" to 431,
+            "Good Omens" to 28717,
+            "Seinfeld" to 530,
+            "M*A*S*H" to 665,
+            "The Good Place" to 2790,
+            "The Muppet Show" to 3288,
+            "The Orville" to 20263,
+            "WandaVision" to 41748
+        )
+
+        // endregion Properties
+
+    }
 
 }
