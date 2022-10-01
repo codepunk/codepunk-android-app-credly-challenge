@@ -39,8 +39,9 @@ Here are a few things I was aware of while creating this app. Call them thoughts
 3. The various `Fragment`s and `ViewModel`s contain a fair amount of repeated code. Normally I would put this code in an ancestor class or perhaps an Extensions file, but in a challenge app such as this I find it's more helpful that such code isn't "hidden" away but is all present, which makes for an easier read-through.
 4. I believe new apps should make use of Jetpack Compose. However, as I am still very new to Compose, in the interest of time I used the more traditional XML view approach.
 5. There is some very rudimentary error handling. Errors are indeed caught but in order to save time, a simple Toast with a generic error message is displayed. (If you turn on airplane mode and attempt to click into a show you haven't yet visited, for example, you'll see such an error message appear for a second or two.)
-6. In a list like the episodes list, I would normally break that list up by season and add headers for each season. This is not only an Android 101 task but actually a bit time-consuming, so I left it out for now, opting for displaying the season and episode numbers in each episode in the list.
-7. I really wanted to make a fun icon for the application but that's the kind of thing I can spend way too much time on, so you're getting the stock Android app icon. ☺️
+6. Related to the above, if there is no internet connectivity thereby preventing a screen from loading its data, and then connectivity is restored, a truly helpful app would catch that and make a new attempt to load that data. There is no such flow in this app.
+7. In a list like the episodes list, I would normally break that list up by season and add headers for each season. This is not only an Android 101 task but actually a bit time-consuming, so I left it out for now, opting for displaying the season and episode numbers in each episode in the list.
+8. I really wanted to make a fun icon for the application but that's the kind of thing I can spend way too much time on, so you're getting the stock Android app icon. ☺️
 
 # Thank you
 Thanks for a fun and challenging idea for a code challenge! I hope you enjoyed playing around with it.
